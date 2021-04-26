@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net"
+	"strings"
 )
 
 var pairs = make(map[string]*net.TCPConn)
@@ -28,21 +29,14 @@ func Server() {
 			continue
 		} else {
 			conn2 := pairs[pairingKey]
-			ip1 := conn.RemoteAddr().String()
-			ip2 := conn2.RemoteAddr().String()
-			conn.Write([]byte(conn2.RemoteAddr().String()))
-			conn2.Write([]byte(conn.RemoteAddr().String()))
+			ip1 := strings.Split(conn.RemoteAddr().String(), ":")[0]
+			ip2 := strings.Split(conn2.RemoteAddr().String(), ":")[0]
+			conn.Write([]byte(ip2))
+			conn2.Write([]byte(ip1))
 			conn.Close()
 			conn2.Close()
 			pairs[pairingKey] = nil
 			fmt.Printf("[INFO] Key %s paired: %s <-> %s\n", pairingKey, ip1, ip2)
 		}
-
-		//r1, _ := net.ResolveUDPAddr("udp", ip1)
-		//r2, _ := net.ResolveUDPAddr("udp", ip2)
-		//conn.Write([]byte(ip1))
-		//conn.WriteTo([]byte(ip2), r1)
-		//conn.WriteTo([]byte(ip1), r2)
-
 	}
 }
