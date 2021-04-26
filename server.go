@@ -23,13 +23,13 @@ func Server() {
 		pairingKey := string(buffer[0:bytesRead])
 		fmt.Println("Received key: ", pairingKey)
 
-		ip1 := conn.RemoteAddr().String()
-		ip2 := ""
 		if pairs[pairingKey] == nil {
 			pairs[pairingKey] = conn
 			continue
 		} else {
 			conn2 := pairs[pairingKey]
+			ip1 := conn.RemoteAddr().String()
+			ip2 := conn2.RemoteAddr().String()
 			conn.Write([]byte(conn2.RemoteAddr().String()))
 			conn2.Write([]byte(conn.RemoteAddr().String()))
 			conn.Close()
