@@ -10,7 +10,7 @@ var pairs = make(map[string]*net.TCPConn)
 func Server() {
 	localAddress := ":8080"
 	addr, _ := net.ResolveTCPAddr("tcp", localAddress)
-	list, _ := net.ListenTCP("TCP", addr)
+	list, _ := net.ListenTCP("tcp", addr)
 	fmt.Println("[INFO] Server started")
 	for {
 		conn, _ := list.AcceptTCP()
